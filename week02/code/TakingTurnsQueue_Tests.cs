@@ -12,6 +12,8 @@ public class TakingTurnsQueueTests
     // run until the queue is empty
     // Expected Result: Bob, Tim, Sue, Bob, Tim, Sue, Tim, Sue, Tim, Tim
     // Defect(s) Found: 
+    //   1. PersonQueue.Enqueue used Insert(0,...) adding people to the FRONT instead of the back,
+    //      causing wrong dequeue order.
     public void TestTakingTurnsQueue_FiniteRepetition()
     {
         var bob = new Person("Bob", 2);
@@ -44,6 +46,8 @@ public class TakingTurnsQueueTests
     // After running 5 times, add George with 3 turns.  Run until the queue is empty.
     // Expected Result: Bob, Tim, Sue, Bob, Tim, Sue, Tim, George, Sue, Tim, George, Tim, George
     // Defect(s) Found: 
+    //   1. PersonQueue.Enqueue used Insert(0,...) adding people to the FRONT instead of the back,
+    //      causing wrong dequeue order and George appearing in wrong position.
     public void TestTakingTurnsQueue_AddPlayerMidway()
     {
         var bob = new Person("Bob", 2);
@@ -86,6 +90,9 @@ public class TakingTurnsQueueTests
     // Run 10 times.
     // Expected Result: Bob, Tim, Sue, Bob, Tim, Sue, Tim, Sue, Tim, Tim
     // Defect(s) Found: 
+    //   1. PersonQueue.Enqueue used Insert(0,...) — wrong order.
+    //   2. GetNextPerson had no check for Turns <= 0 (infinite), so Tim was never re-enqueued
+    //      and disappeared from the queue after his first turn.
     public void TestTakingTurnsQueue_ForeverZero()
     {
         var timTurns = 0;
@@ -117,6 +124,9 @@ public class TakingTurnsQueueTests
     // Run 10 times.
     // Expected Result: Tim, Sue, Tim, Sue, Tim, Sue, Tim, Tim, Tim, Tim
     // Defect(s) Found: 
+    //   1. PersonQueue.Enqueue used Insert(0,...) — wrong order.
+    //   2. GetNextPerson had no check for Turns <= 0 (infinite), so Tim (Turns=-3) was never
+    //      re-enqueued and disappeared from the queue after his first turn.
     public void TestTakingTurnsQueue_ForeverNegative()
     {
         var timTurns = -3;
@@ -143,7 +153,7 @@ public class TakingTurnsQueueTests
     [TestMethod]
     // Scenario: Try to get the next person from an empty queue
     // Expected Result: Exception should be thrown with appropriate error message.
-    // Defect(s) Found: 
+    // Defect(s) Found: None - this already worked correctly.
     public void TestTakingTurnsQueue_Empty()
     {
         var players = new TakingTurnsQueue();
