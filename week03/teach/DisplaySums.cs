@@ -1,5 +1,7 @@
-﻿public static class DisplaySums {
-    public static void Run() {
+﻿public static class DisplaySums
+{
+    public static void Run()
+    {
         DisplaySumPairs([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
         // Should show something like (order does not matter):
         // 6 4
@@ -27,7 +29,21 @@
     /// in the list.
     /// </summary>
     /// <param name="numbers">array of integers</param>
-    private static void DisplaySumPairs(int[] numbers) {
-        // TODO Problem 2 - This should print pairs of numbers in the given array
+    private static void DisplaySumPairs(int[] numbers)
+    {
+        var seen = new HashSet<int>();
+
+        foreach (int x in numbers)
+        {
+            int complement = 10 - x;
+
+            // If the complement is already in our set, we've found a valid pair.
+            // Because we build the set as we go, each pair is only printed once —
+            // when we reach the second number of the pair, not the first.
+            if (seen.Contains(complement))
+                Console.WriteLine($"{x} {complement}");
+
+            seen.Add(x);
+        }
     }
 }
